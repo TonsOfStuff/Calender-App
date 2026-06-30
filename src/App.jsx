@@ -6,7 +6,6 @@ const currentYear = date.getFullYear();
 const currentDay = date.getDate();
 
 const dayOfWeekNum = date.getDay();
-const firstDayOfMonthNum = new Date(currentYear, currentMonth - 1, 1).getDay();
 const weekmap = {
   0: "Sunday",
   1: "Monday",
@@ -17,7 +16,6 @@ const weekmap = {
   6: "Saturday"
 };
 const dayOfWeek = weekmap[dayOfWeekNum];
-const firstDayOfMonth = weekmap[firstDayOfMonthNum];
 
 const monthMap = {
   "January": 31,
@@ -47,28 +45,47 @@ const monthMapNum = {
   11: "November",
   12: "December"
 }
-const currentMonthName = monthMapNum[currentMonth];
 
-function GenerateDay({month}){
+
+function GenerateDay({month, firstDayOfMonthNum, currentDay}) {
+  let check = false;
   let dayArray = [];
 
-  for (let i = 0; i < monthMap[month]; i++){
-    dayArray.push (
-      <div key = {i}className = "bg-slate-300 h-30 w-full p-1">{i + 1}</div>
-    )
+  //Formula: 7 - ((days + gap) mod 7)
+
+  for (let i = 0; i < monthMap[month] + firstDayOfMonthNum + (7 - (monthMap[month] + firstDayOfMonthNum) % 7); i++){
+    if (i === firstDayOfMonthNum || (i + 1 - firstDayOfMonthNum <= monthMap[month] && check === true)){
+      check = true;
+      if (currentDay === i + 1 - firstDayOfMonthNum && month === monthMapNum[currentMonth]){ //If tonights the night
+        dayArray.push (
+          <button key={i} className = "bg-slate-500 h-30 w-full p-1 flex hover:bg-slate-400">{i + 1 - firstDayOfMonthNum}</button>
+        )
+      }else{
+        dayArray.push (
+          <button key={i} className = "bg-slate-300 h-30 w-full p-1 flex hover:bg-slate-400">{i + 1 - firstDayOfMonthNum}</button>
+        )
+      }
+      
+    }else{
+      dayArray.push(
+        <div key={i} className="bg-slate-300 h-30 w-full p-1"> </div>
+      )
+    }
+    
   }
 
   return dayArray;
 }
 
 function Calendar({month, day}) {
-  const [currentMonth, setCurrentMonth] = useState(month);
-  const [currentDay, setCurrentDay] = useState(day);
+  const [onMonth, setMonth] = useState(month);
+  const [onDay, setDay] = useState(day);
 
-  
+  let firstDayOfMonthNum = new Date(currentYear, onMonth - 1, 1).getDay();
+  const currentMonthName = monthMapNum[onMonth];
 
   return (
-    <div className="h-fit w-screen border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
+    <div className="h-fit w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
       <h1 className="text-2xl font-bold mb-4">{currentMonthName}</h1>
       <div className="grid grid-cols-7 text-center mb-1 gap-1">
           <div className = "bg-slate-200">Sunday</div>
@@ -80,7 +97,7 @@ function Calendar({month, day}) {
           <div className="bg-slate-200" >Saturday</div>
       </div>
       <div className = "grid grid-cols-7 items-start gap-1 align-items-top">
-        <GenerateDay month={currentMonthName} />
+        <GenerateDay month={currentMonthName} firstDayOfMonthNum={firstDayOfMonthNum} currentDay={onDay}/>
       </div>
     </div>
   )
