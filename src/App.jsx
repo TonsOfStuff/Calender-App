@@ -47,13 +47,13 @@ const monthMapNum = {
 }
 
 
-function GenerateDay({month, firstDayOfMonthNum, currentDay}) {
+function GenerateDay({month, firstDayOfMonthNum}) {
   let check = false;
   let dayArray = [];
 
   //Formula: 7 - ((days + gap) mod 7)
 
-  for (let i = 0; i < monthMap[month] + firstDayOfMonthNum + (7 - (monthMap[month] + firstDayOfMonthNum) % 7); i++){
+  for (let i = 0; i < monthMap[month] + firstDayOfMonthNum + (7 - (monthMap[month] + firstDayOfMonthNum) % 7) % 7; i++){
     if (i === firstDayOfMonthNum || (i + 1 - firstDayOfMonthNum <= monthMap[month] && check === true)){
       check = true;
       if (currentDay === i + 1 - firstDayOfMonthNum && month === monthMapNum[currentMonth]){ //If tonights the night
@@ -77,15 +77,14 @@ function GenerateDay({month, firstDayOfMonthNum, currentDay}) {
   return dayArray;
 }
 
-function Calendar({month, day}) {
-  const [onMonth, setMonth] = useState(month);
-  const [onDay, setDay] = useState(day);
+function Calendar({month}) {
+  
 
-  let firstDayOfMonthNum = new Date(currentYear, onMonth - 1, 1).getDay();
-  const currentMonthName = monthMapNum[onMonth];
+  let firstDayOfMonthNum = new Date(currentYear, month - 1, 1).getDay();
+  const currentMonthName = monthMapNum[month];
 
   return (
-    <div className="h-fit w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
+    <div className="h-300 w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
       <h1 className="text-2xl font-bold mb-4">{currentMonthName}</h1>
       <div className="grid grid-cols-7 text-center mb-1 gap-1">
           <div className = "bg-slate-200">Sunday</div>
@@ -97,7 +96,7 @@ function Calendar({month, day}) {
           <div className="bg-slate-200" >Saturday</div>
       </div>
       <div className = "grid grid-cols-7 items-start gap-1 align-items-top">
-        <GenerateDay month={currentMonthName} firstDayOfMonthNum={firstDayOfMonthNum} currentDay={onDay}/>
+        <GenerateDay month={currentMonthName} firstDayOfMonthNum={firstDayOfMonthNum}/>
       </div>
     </div>
   )
@@ -106,9 +105,21 @@ function Calendar({month, day}) {
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const [onMonth, setMonth] = useState(currentMonth);
+
   return (
     <>
-      <Calendar month={currentMonth} day={currentDay} />
+      
+      <Calendar month={onMonth} />
+      <div className="flex gap-4 mb-6 justify-center">
+        <button onClick={() => setMonth(1)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Jan</button>
+        <button onClick={() => setMonth(2)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Feb</button>
+        <button onClick={() => setMonth(3)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Mar</button>
+        <button onClick={() => setMonth(4)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Apr</button>
+        <button onClick={() => setMonth(5)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">May</button>
+        <button onClick={() => setMonth(6)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Jun</button>
+      </div>
     </>
   )
 }
