@@ -148,7 +148,6 @@ function Calendar({month, tasks, saveTask}) {
 
   let checkCalenderClick = null;
   if (focusedDay !== null){
-    console.log("askdnhasjhd")
     checkCalenderClick = (
       <AddMenuItem day={focusedDay} currentTasks={tasks} onSave = {saveTask} onClose={() => {setFocusedDay(null)}}/>
     )
@@ -167,7 +166,7 @@ function Calendar({month, tasks, saveTask}) {
           <div className="bg-slate-200" >Saturday</div>
       </div>
       <div className = "grid grid-cols-7 items-start gap-1 align-items-top">
-        <GenerateDay month={currentMonthName} monthNum = {currentMonth} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}}/>
+        <GenerateDay month={currentMonthName} monthNum = {month} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}}/>
       </div>
 
       {checkCalenderClick}
