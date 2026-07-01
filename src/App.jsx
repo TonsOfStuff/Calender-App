@@ -186,7 +186,7 @@ function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks
 
 
 
-function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask}) {
+function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask, changeMonth}) {
   
 
   let firstDayOfMonthNum = new Date(currentYear, month - 1, 1).getDay();
@@ -203,7 +203,12 @@ function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask}) {
 
   return (
     <div className="h-300 w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
-      <h1 className="text-2xl font-bold mb-4">{currentMonthName}</h1>
+      <div className="flex justify-left gap-4 mb-4">
+        <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
+        <h1 className="text-center text-2xl min-w-30 font-bold">{currentMonthName}</h1>
+        <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
+      </div>
+      
       <div className="grid grid-cols-7 text-center mb-1 gap-1">
           <div className = "bg-slate-200">Sunday</div>
           <div className="bg-slate-200">Monday</div>
@@ -305,18 +310,19 @@ function App() {
     });
   }
 
+  const changeMonth = (newMonth) => {
+    if (newMonth > 12){
+      newMonth = 1;
+    }
+    if (newMonth < 1){
+      newMonth = 12;
+    }
+    setMonth(newMonth);
+  }
+
   return (
     <>
-      
-      <Calendar month={onMonth} tasks={allEvents} saveTask={addNewTask} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask} />
-      <div className="flex gap-4 mb-6 justify-center">
-        <button onClick={() => setMonth(1)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Jan</button>
-        <button onClick={() => setMonth(2)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Feb</button>
-        <button onClick={() => setMonth(3)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Mar</button>
-        <button onClick={() => setMonth(4)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Apr</button>
-        <button onClick={() => setMonth(5)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">May</button>
-        <button onClick={() => setMonth(6)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Jun</button>
-      </div>
+      <Calendar month={onMonth} tasks={allEvents} saveTask={addNewTask} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask} changeMonth={changeMonth} />
     </>
   )
 }
