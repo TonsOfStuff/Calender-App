@@ -60,7 +60,7 @@ function AddMenuItem({day, currentTasks, onSave, onClose, deleteTask, finishTask
   const daySpecificTasks = currentTasks[day.dateID] || [];
 
   return(
-    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-sky-100 border-2 border-sky-400 p-6 rounded-xl shadow-2xl z-0 w-152 h-102 text-slate-800">
+    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-sky-100 border-2 border-sky-400 p-6 rounded-xl shadow-lg z-0 w-152 h-102 text-slate-800">
       <h3 className="font-bold text-lg mb-1 text-slate-800">Manage Schedule</h3>
       <p className="text-xs text-slate-500 mb-4 font-mono">{day.dateID}</p>
       
@@ -137,8 +137,8 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
       check = true;
       if (currentDay === dayNum && month === monthMapNum[currentMonth] && year === currentYear){ //If tonights the night
         dayArray.push (
-          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "bg-slate-200 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
-            <span className="text-left font-bold text-slate-700 text-sm">{dayNum}</span>
+          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] rounded-md bg-sky-600 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
+            <span className="text-left font-bold text-slate-100 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
                 <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
@@ -155,8 +155,8 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
         )
       }else{
         dayArray.push (
-          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "bg-slate-300 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
-            <span className="text-left font-bold text-slate-700 text-sm">{dayNum}</span>
+          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
+            <span className="text-left font-bold text-slate-600 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
                 <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
@@ -164,7 +164,7 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
                 </div>
               ))}
               {extraTaskCount > 0 && (
-                <div className="text-[10px] bg-gray-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                <div className="text-[10px] text-white px-1 py-0.5 rounded truncate w-full text-left">
                   +{extraTaskCount} more
                 </div>
               )}
@@ -175,7 +175,7 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
       
     }else{
       dayArray.push(
-        <div key={i} className="bg-slate-300 h-30 w-full p-1"> </div>
+        <div key={i} className="shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 h-30 w-full p-1"> </div>
       )
     }
     
@@ -206,8 +206,8 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
   }
 
   return (
-    <div className="h-300 w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
-      <div className="grid grid-cols-2 gap-4 mb-8">
+    <div className="h-300 w-auto border bg-gray-900 p-2 ">
+      <div className="text-white grid grid-cols-2 gap-4 mb-8">
         <div className="flex justify-center gap-4">
           <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
           <h1 className="text-center text-2xl min-w-35 font-bold">{currentMonthName}</h1>
@@ -222,17 +222,19 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
         </div>
       </div>
       
-      <div className="grid grid-cols-7 text-center mb-1 gap-1">
-          <div className = "bg-slate-200">Sunday</div>
-          <div className="bg-slate-200">Monday</div>
-          <div className="bg-slate-200">Tuesday</div>
-          <div className="bg-slate-200">Wednesday</div>
-          <div className="bg-slate-200">Thursday</div>
-          <div className="bg-slate-200">Friday</div>
-          <div className="bg-slate-200" >Saturday</div>
-      </div>
-      <div className = "grid grid-cols-7 items-start gap-1 align-items-top">
-        <GenerateDay month={currentMonthName} monthNum = {month} year={year} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}} allTasks = {tasks}/>
+      <div className="inset-shadow-gray-500 bg-gray-900 p-2 rounded-md">
+        <div className="text-white grid grid-cols-7 text-center mb-1 gap-1">
+            <div className = "rounded-md bg-gray-900 grid">Sunday</div>
+            <div className="rounded-md bg-gray-900 grid">Monday</div>
+            <div className="rounded-md bg-gray-900 grid">Tuesday</div>
+            <div className="rounded-md bg-gray-900 grid">Wednesday</div>
+            <div className="rounded-md bg-gray-900 grid">Thursday</div>
+            <div className="rounded-md bg-gray-900 grid">Friday</div>
+            <div className="rounded-md bg-gray-900 grid" >Saturday</div>
+        </div>
+        <div className = "text-white grid grid-cols-7 items-start gap-1 p-2 align-items-top">
+          <GenerateDay month={currentMonthName} monthNum = {month} year={year} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}} allTasks = {tasks}/>
+        </div>
       </div>
 
       {checkCalenderClick}
