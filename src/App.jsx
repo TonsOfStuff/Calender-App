@@ -48,7 +48,7 @@ const monthMapNum = {
   12: "December"
 }
 
-function AddMenuItem({day, currentTasks, onSave, onClose}){
+function AddMenuItem({day, currentTasks, onSave, onClose, deleteTask, finishTask, redoTask}) {
   const [inputText, setInputText] = useState("");
 
   const handleSubmit = (e) => {
@@ -70,9 +70,18 @@ function AddMenuItem({day, currentTasks, onSave, onClose}){
         ) : (
           daySpecificTasks.map(t => (
             <div key={t.id} className="flex gap-2 text-xs bg-sky-200/80 px-2 py-1 rounded text-slate-700">
-              <p className="wrap-anywhere mr-auto">{t.text}</p>
-              <button className="self-center bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Done</button>
-              <button className="self-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
+              {t.done === true ? (
+                <p className="content-center wrap-anywhere mr-auto line-through"><s>{t.text}</s></p>
+              ) : (
+                <p className="content-center wrap-anywhere mr-auto">{t.text}</p>
+                
+              )}
+              {t.done === true ? (
+                <button onClick = {() => redoTask(day.dateID, t.id)} className="self-center bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Redo</button>
+              ) : (
+                <button onClick = {() => finishTask(day.dateID, t.id)} className="self-center bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Finish</button>
+              )}
+              <button onClick = {() => deleteTask(day.dateID, t.id)} className="self-center bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">Delete</button>
             </div>
           ))
         )}
@@ -97,11 +106,6 @@ function AddMenuItem({day, currentTasks, onSave, onClose}){
       </form>
     </div>
   )
-}
-
-function deleteTask({day, text, currentTasks, onDelete}){
-  daySpecificTasks = currentTasks[day.dateID] || [];
-  const updatedTasks = daySpecificTasks.filter(task => task.text !== text);
 }
 
 function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks}) {
@@ -182,7 +186,7 @@ function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks
 
 
 
-function Calendar({month, tasks, saveTask}) {
+function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask}) {
   
 
   let firstDayOfMonthNum = new Date(currentYear, month - 1, 1).getDay();
@@ -193,7 +197,7 @@ function Calendar({month, tasks, saveTask}) {
   let checkCalenderClick = null;
   if (focusedDay !== null){
     checkCalenderClick = (
-      <AddMenuItem day={focusedDay} currentTasks={tasks} onSave = {saveTask} onClose={() => {setFocusedDay(null)}}/>
+      <AddMenuItem day={focusedDay} currentTasks={tasks} onSave = {saveTask} onClose={() => {setFocusedDay(null)}} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask}/>
     )
   }
 
@@ -242,7 +246,8 @@ function App() {
       const existingTasks = prevEvents[dateKey] || [];
       const newTaskObj = {
         id: Date.now(),
-        text: taskText
+        text: taskText,
+        done: false
       };
       return {
         ...prevEvents,
@@ -251,10 +256,59 @@ function App() {
     });
   };
 
+  const deleteTask = (dateKey, taskId) => {
+    console.log("Deleting task with ID:", taskId, "from date:", dateKey);
+    setAllEvents((prevEvents) => {
+      const existingTasks = prevEvents[dateKey] || [];
+      const updatedTasks = existingTasks.filter(task => task.id !== taskId);
+      return {
+        ...prevEvents,
+        [dateKey]: updatedTasks
+      };
+    });
+  };
+
+  const finishTask = (dateKey, taskId) => {
+    setAllEvents((prevEvents) => {
+      const existingTasks = prevEvents[dateKey] || [];
+      const targetTask = existingTasks.find(task => task.id === taskId);
+      if (!targetTask) return prevEvents;
+
+      const updatedTask = {...targetTask, done: true};
+      const remainingTasks = existingTasks.filter(task => task.id !== taskId);
+
+      const updatedTaskList = [...remainingTasks, updatedTask];
+
+      return {
+        ...prevEvents,
+        [dateKey]: updatedTaskList
+      };
+    });
+  }
+
+  const redoTask = (dateKey, taskId) => {
+    setAllEvents((prevEvents) => {
+      const existingTasks = prevEvents[dateKey] || [];
+      const targetTask = existingTasks.find(task => task.id === taskId);
+      if (!targetTask) return prevEvents;
+
+      const updatedTask = {...targetTask, done: false};
+      const remainingUnfinishedTasks = existingTasks.filter(task => task.id !== taskId && task.done === false);
+      const remainingFinishedTasks = existingTasks.filter(task => task.id !== taskId && task.done === true);
+
+      const updatedTaskList = [...remainingUnfinishedTasks, updatedTask, ...remainingFinishedTasks ];
+
+      return {
+        ...prevEvents,
+        [dateKey]: updatedTaskList
+      };
+    });
+  }
+
   return (
     <>
       
-      <Calendar month={onMonth} tasks={allEvents} saveTask={addNewTask} />
+      <Calendar month={onMonth} tasks={allEvents} saveTask={addNewTask} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask} />
       <div className="flex gap-4 mb-6 justify-center">
         <button onClick={() => setMonth(1)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Jan</button>
         <button onClick={() => setMonth(2)} className="px-4 py-2 bg-slate-800 rounded hover:bg-slate-700">Feb</button>
