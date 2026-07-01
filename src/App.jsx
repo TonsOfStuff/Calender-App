@@ -112,10 +112,14 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
   let check = false;
   let dayArray = [];
 
-  //Formula: 7 - ((days + gap) mod 7)
+  //Formula for a full box calender bc it looks better: 7 - ((days + gap) mod 7) 
+  let daysOfTheMonth = monthMap[month];
+  if (month === "February" && year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) {
+    daysOfTheMonth = 29; // Leap year
+  }
 
-  for (let i = 0; i < monthMap[month] + firstDayOfMonthNum + (7 - (monthMap[month] + firstDayOfMonthNum) % 7) % 7; i++){
-    if (i === firstDayOfMonthNum || (i + 1 - firstDayOfMonthNum <= monthMap[month] && check === true)){ 
+  for (let i = 0; i < daysOfTheMonth + firstDayOfMonthNum + (7 - (daysOfTheMonth + firstDayOfMonthNum) % 7) % 7; i++){
+    if (i === firstDayOfMonthNum || (i + 1 - firstDayOfMonthNum <= daysOfTheMonth && check === true)){ 
       let dayNum = i + 1 - firstDayOfMonthNum;
 
       const formattedMonth = String(monthNum).padStart(2, "0")
