@@ -108,7 +108,7 @@ function AddMenuItem({day, currentTasks, onSave, onClose, deleteTask, finishTask
   )
 }
 
-function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks}) {
+function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, allTasks}) {
   let check = false;
   let dayArray = [];
 
@@ -120,7 +120,7 @@ function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks
 
       const formattedMonth = String(monthNum).padStart(2, "0")
       const formattedDay = String(dayNum).padStart(2, "0")
-      const dateID = `${formattedMonth}/${formattedDay}/${currentYear}`; // Format: MM-DD-YYYY
+      const dateID = `${formattedMonth}/${formattedDay}/${year}`; // Format: MM-DD-YYYY
 
       const dayTasks = allTasks[dateID] || [];
 
@@ -131,7 +131,7 @@ function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks
       
 
       check = true;
-      if (currentDay === dayNum && month === monthMapNum[currentMonth]){ //If tonights the night
+      if (currentDay === dayNum && month === monthMapNum[currentMonth] && year === currentYear){ //If tonights the night
         dayArray.push (
           <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "bg-slate-200 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
             <span className="text-left font-bold text-slate-700 text-sm">{dayNum}</span>
@@ -186,10 +186,10 @@ function GenerateDay({month, monthNum, firstDayOfMonthNum, setFocusDay, allTasks
 
 
 
-function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask, changeMonth}) {
+function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTask, changeMonth, changeYear}) {
   
 
-  let firstDayOfMonthNum = new Date(currentYear, month - 1, 1).getDay();
+  let firstDayOfMonthNum = new Date(year, month - 1, 1).getDay();
   const currentMonthName = monthMapNum[month];
 
   const [focusedDay, setFocusedDay] = useState(null)
@@ -203,10 +203,19 @@ function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask, cha
 
   return (
     <div className="h-300 w-auto border bg-gradient-to-br from-gray-300 to-gray-500 p-2 hover:bg-slate-400 transition p-7">
-      <div className="flex justify-left gap-4 mb-4">
-        <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
-        <h1 className="text-center text-2xl min-w-30 font-bold">{currentMonthName}</h1>
-        <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
+      <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="flex justify-center gap-4">
+          <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
+          <h1 className="text-center text-2xl min-w-35 font-bold">{currentMonthName}</h1>
+          <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
+        </div>
+        
+
+        <div className="flex self-center justify-center gap-4">
+          <button className="scale-150 hover:scale-190" onClick={() => changeYear(year - 1)}><span className="content-center">&#8592;</span></button>
+          <h1 className="text-center text-2xl min-w-30 font-bold">{year}</h1>
+          <button className="scale-150 hover:scale-190" onClick={() => changeYear(year + 1)}><span className="content-center">&#8594;</span></button>
+        </div>
       </div>
       
       <div className="grid grid-cols-7 text-center mb-1 gap-1">
@@ -219,7 +228,7 @@ function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask, cha
           <div className="bg-slate-200" >Saturday</div>
       </div>
       <div className = "grid grid-cols-7 items-start gap-1 align-items-top">
-        <GenerateDay month={currentMonthName} monthNum = {month} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}} allTasks = {tasks}/>
+        <GenerateDay month={currentMonthName} monthNum = {month} year={year} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}} allTasks = {tasks}/>
       </div>
 
       {checkCalenderClick}
@@ -230,7 +239,7 @@ function Calendar({month, tasks, saveTask, deleteTask, finishTask, redoTask, cha
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const [onYear, setYear] = useState(currentYear);
   const [onMonth, setMonth] = useState(currentMonth);
 
   //Saving to local storage here
@@ -310,19 +319,25 @@ function App() {
     });
   }
 
+  const changeYear = (newYear) => {
+    setYear(newYear);
+  }
+
   const changeMonth = (newMonth) => {
     if (newMonth > 12){
+      changeYear(onYear + 1);
       newMonth = 1;
     }
     if (newMonth < 1){
+      changeYear(onYear - 1);
       newMonth = 12;
     }
-    setMonth(newMonth);
+    setMonth(newMonth);;
   }
 
   return (
     <>
-      <Calendar month={onMonth} tasks={allEvents} saveTask={addNewTask} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask} changeMonth={changeMonth} />
+      <Calendar month={onMonth} year={onYear} tasks={allEvents} saveTask={addNewTask} deleteTask={deleteTask} finishTask={finishTask} redoTask={redoTask} changeMonth={changeMonth} changeYear={changeYear} />
     </>
   )
 }
