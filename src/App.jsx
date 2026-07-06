@@ -223,7 +223,7 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
     <div className="min-h-screen h-auto w-auto border bg-linear-to-b from-gray-900 to-gray-800 p-2 ">
       <div className="text-white grid grid-cols-2 gap-4 sm:mb-8 mb:2">
         <div className="flex justify-center sm:gap-4 gap-1">
-          <button className="sm:scale-150 sm:shover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
+          <button className="sm:scale-150 sm:hover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
           <h1 className="text-center content-center text-xs sm:text-2xl min-w-17 sm:min-w-35 font-bold">{currentMonthName}</h1>
           <button className="sm:scale-150 sm:hover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
         </div>
