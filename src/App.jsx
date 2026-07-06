@@ -206,7 +206,7 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
   }
 
   return (
-    <div className="h-300 w-auto border bg-gray-900 p-2 ">
+    <div className="h-fit w-auto border bg-gray-900 p-2 ">
       <div className="text-white grid grid-cols-2 gap-4 mb-8">
         <div className="flex justify-center gap-4">
           <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
