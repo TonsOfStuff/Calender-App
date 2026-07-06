@@ -112,6 +112,18 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
   let check = false;
   let dayArray = [];
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   //Formula for a full box calender bc it looks better: 7 - ((days + gap) mod 7) 
   let daysOfTheMonth = monthMap[month];
   if (month === "February" && year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) {
@@ -129,8 +141,10 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
       const dayTasks = allTasks[dateID] || [];
 
       //const uncompletedTasks = dayTasks.filter(task => !task.done);
-
-      const maxVisibleTasks = 3;
+      let maxVisibleTasks = 3;  
+      if (windowWidth < 640) {
+        maxVisibleTasks = 2;
+      }
       const visibleTasks = dayTasks.slice(0, maxVisibleTasks);
       const extraTaskCount = dayTasks.length - maxVisibleTasks;
 
@@ -144,17 +158,17 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
                 task.done ? (
-                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                  <div key={task.id} className="sm:text-[10px] text-[7px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
                     <s>{task.text}</s>
                   </div>
                 ) : (
-                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                  <div key={task.id} className="sm:text-[10px] text-[7px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
                     {task.text}
                   </div>
                 )
               ))}
               {extraTaskCount > 0 && (
-                <div className="text-[10px] bg-gray-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                <div className="sm:text-[10px] text-[7px] text-white px-1 py-0.5 rounded truncate w-full text-left">
                   +{extraTaskCount} more
                 </div>
               )}
@@ -168,17 +182,17 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
                 task.done ? (
-                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                  <div key={task.id} className="sm:text-[10px] text-[7px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
                     <s>{task.text}</s>
                   </div>
                 ) : (
-                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                  <div key={task.id} className="sm:text-[10px] text-[7px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
                     {task.text}
                   </div>
                 )
               ))}
               {extraTaskCount > 0 && (
-                <div className="text-[10px] text-white px-1 py-0.5 rounded truncate w-full text-left">
+                <div className="sm:text-[10px] text-[7px] text-white px-1 py-0.5 rounded truncate w-full text-left">
                   +{extraTaskCount} more
                 </div>
               )}
@@ -220,7 +234,7 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
   }
 
   return (
-    <div className="min-h-screen h-auto w-auto border bg-linear-to-b from-gray-900 to-gray-800 p-2 ">
+    <div className="min-h-screen h-auto w-auto bg-linear-to-b from-gray-900 to-gray-800 p-2 ">
       <div className="text-white grid grid-cols-2 gap-4 sm:mb-8 mb:2">
         <div className="flex justify-center sm:gap-4 gap-1">
           <button className="sm:scale-150 sm:hover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
