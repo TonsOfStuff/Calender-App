@@ -137,7 +137,7 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
       check = true;
       if (currentDay === dayNum && month === monthMapNum[currentMonth] && year === currentYear){ //If tonights the night
         dayArray.push (
-          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] rounded-md bg-sky-600 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
+          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] rounded-md bg-sky-600 sm:h-30 h-20 w-full p-1 flex flex-col hover:bg-slate-400">
             <span className="text-left font-bold text-slate-100 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
@@ -155,7 +155,7 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
         )
       }else{
         dayArray.push (
-          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 h-30 w-full p-1 flex flex-col hover:bg-slate-400">
+          <button onClick={() => setFocusDay({dayNum, dateID})} key={i} className = "shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 sm:h-30 h-20 w-full p-1 flex flex-col hover:bg-slate-400">
             <span className="text-left font-bold text-slate-600 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
@@ -175,7 +175,7 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
       
     }else{
       dayArray.push(
-        <div key={i} className="shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 h-30 w-full p-1"> </div>
+        <div key={i} className="shadow-[-1px_1px_0px_0px_rgba(0,0,0,0.5)] border-gray-800 border-r border-t rounded-md bg-gray-900 sm:h-30 h-20 w-full p-1"> </div>
       )
     }
     
@@ -206,31 +206,38 @@ function Calendar({month, year, tasks, saveTask, deleteTask, finishTask, redoTas
   }
 
   return (
-    <div className="h-fit w-auto border bg-gray-900 p-2 ">
-      <div className="text-white grid grid-cols-2 gap-4 mb-8">
-        <div className="flex justify-center gap-4">
-          <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
-          <h1 className="text-center text-2xl min-w-35 font-bold">{currentMonthName}</h1>
-          <button className="scale-150 hover:scale-190" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
+    <div className="min-h-screen h-auto w-auto border bg-linear-to-b from-gray-900 to-gray-800 p-2 ">
+      <div className="text-white grid grid-cols-2 gap-4 sm:mb-8 mb:2">
+        <div className="flex justify-center sm:gap-4 gap-1">
+          <button className="sm:scale-150 sm:shover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month - 1)}><span className="content-center">&#8592;</span></button>
+          <h1 className="text-center align-middle text-xs sm:text-2xl min-w-17 sm:min-w-35 font-bold">{currentMonthName}</h1>
+          <button className="sm:scale-150 sm:hover:scale-190 scale-50 hover:scale-100" onClick={() => changeMonth(month + 1)}><span className="content-center">&#8594;</span></button>
         </div>
         
 
-        <div className="flex self-center justify-center gap-4">
-          <button className="scale-150 hover:scale-190" onClick={() => changeYear(year - 1)}><span className="content-center">&#8592;</span></button>
-          <h1 className="text-center text-2xl min-w-30 font-bold">{year}</h1>
-          <button className="scale-150 hover:scale-190" onClick={() => changeYear(year + 1)}><span className="content-center">&#8594;</span></button>
+        <div className="flex self-center justify-center sm:gap-4 gap-1">
+          <button className="sm:scale-150 sm:hover:scale-190 scale-50 hover:scale-100" onClick={() => changeYear(year - 1)}><span className="content-center">&#8592;</span></button>
+          <h1 className="text-center content-center text-xs sm:text-2xl min-w-17 sm:min-w-35 font-bold">{year}</h1>
+          <button className="scale-50 hover:scale-100 sm:scale-150 sm:hover:scale-190" onClick={() => changeYear(year + 1)}><span className="content-center">&#8594;</span></button>
         </div>
       </div>
       
       <div className="inset-shadow-gray-500 bg-gray-900 p-2 rounded-md">
-        <div className="text-white grid grid-cols-7 text-center mb-1 gap-1">
-            <div className = "rounded-md bg-gray-900 grid">Sunday</div>
-            <div className="rounded-md bg-gray-900 grid">Monday</div>
-            <div className="rounded-md bg-gray-900 grid">Tuesday</div>
-            <div className="rounded-md bg-gray-900 grid">Wednesday</div>
-            <div className="rounded-md bg-gray-900 grid">Thursday</div>
-            <div className="rounded-md bg-gray-900 grid">Friday</div>
-            <div className="rounded-md bg-gray-900 grid" >Saturday</div>
+        <div className="text-white grid grid-cols-7 text-center mb-1 p-2 pb-0 sm:gap-1">
+            <div className = "rounded-md sm:grid hidden bg-gray-900">Sunday</div>
+            <div className = "rounded-md text-xs sm:hidden bg-gray-900 grid">Sun</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden">Monday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Mon</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden">Tuesday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Tue</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden">Wednesday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Wed</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden">Thursday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Thu</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden">Friday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Fri</div>
+            <div className="rounded-md bg-gray-900 sm:grid hidden" >Saturday</div>
+            <div className="rounded-md text-xs bg-gray-900 sm:hidden">Sat</div>
         </div>
         <div className = "text-white grid grid-cols-7 items-start gap-1 p-2 align-items-top">
           <GenerateDay month={currentMonthName} monthNum = {month} year={year} firstDayOfMonthNum={firstDayOfMonthNum} setFocusDay={(dayObj) => {setFocusedDay(dayObj)}} allTasks = {tasks}/>
