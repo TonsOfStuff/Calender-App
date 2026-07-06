@@ -128,9 +128,11 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
 
       const dayTasks = allTasks[dateID] || [];
 
+      const uncompletedTasks = dayTasks.filter(task => !task.done);
+
       const maxVisibleTasks = 3;
-      const visibleTasks = dayTasks.slice(0, maxVisibleTasks);
-      const extraTaskCount = dayTasks.length - maxVisibleTasks;
+      const visibleTasks = uncompletedTasks.slice(0, maxVisibleTasks);
+      const extraTaskCount = uncompletedTasks.length - maxVisibleTasks;
 
       
 
