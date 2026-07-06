@@ -60,7 +60,7 @@ function AddMenuItem({day, currentTasks, onSave, onClose, deleteTask, finishTask
   const daySpecificTasks = currentTasks[day.dateID] || [];
 
   return(
-    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-sky-100 border-2 border-sky-400 p-6 rounded-xl shadow-lg z-0 w-152 h-102 text-slate-800">
+    <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 bg-sky-100 border-2 border-sky-400 sm:p-6 p-3 rounded-xl shadow-lg z-0 sm:w-152 w-72 h-102 text-slate-800">
       <h3 className="font-bold text-lg mb-1 text-slate-800">Manage Schedule</h3>
       <p className="text-xs text-slate-500 mb-4 font-mono">{day.dateID}</p>
       
