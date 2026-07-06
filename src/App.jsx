@@ -128,11 +128,11 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
 
       const dayTasks = allTasks[dateID] || [];
 
-      const uncompletedTasks = dayTasks.filter(task => !task.done);
+      //const uncompletedTasks = dayTasks.filter(task => !task.done);
 
       const maxVisibleTasks = 3;
-      const visibleTasks = uncompletedTasks.slice(0, maxVisibleTasks);
-      const extraTaskCount = uncompletedTasks.length - maxVisibleTasks;
+      const visibleTasks = dayTasks.slice(0, maxVisibleTasks);
+      const extraTaskCount = dayTasks.length - maxVisibleTasks;
 
       
 
@@ -143,9 +143,15 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
             <span className="text-left font-bold text-slate-100 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
-                <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
-                  {task.text}
-                </div>
+                task.done ? (
+                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                    <s>{task.text}</s>
+                  </div>
+                ) : (
+                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                    {task.text}
+                  </div>
+                )
               ))}
               {extraTaskCount > 0 && (
                 <div className="text-[10px] bg-gray-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
@@ -161,9 +167,15 @@ function GenerateDay({month, monthNum, year, firstDayOfMonthNum, setFocusDay, al
             <span className="text-left font-bold text-slate-600 text-sm">{dayNum}</span>
             <div className="w-full mt-1 flex flex-col gap-1 overflow-hidden">
               {visibleTasks.map((task) => (
-                <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
-                  {task.text}
-                </div>
+                task.done ? (
+                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                    <s>{task.text}</s>
+                  </div>
+                ) : (
+                  <div key={task.id} className="text-[10px] bg-blue-500 text-white px-1 py-0.5 rounded truncate w-full text-left">
+                    {task.text}
+                  </div>
+                )
               ))}
               {extraTaskCount > 0 && (
                 <div className="text-[10px] text-white px-1 py-0.5 rounded truncate w-full text-left">
